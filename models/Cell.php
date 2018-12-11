@@ -6,9 +6,6 @@
  * Time: 21:40
  */
 
-namespace Cell;
-
-
 class Cell
 {
     private $size;

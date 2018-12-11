@@ -6,19 +6,16 @@
  * Time: 21:41
  */
 
-namespace Memory;
-
 include "Cell.php";
-use Cell\Cell;
 
 class Memory
 {
     private $cells;
     private $alpha;
     private $currName;
-
+    
     /**
-     * Memory constructor.
+     * cells constructor.
      * @param $cell
      */
     public function __construct()
@@ -28,11 +25,11 @@ class Memory
         $this->currName = 0;
     }
 
-    public function initMemory(array $values)
+    public function initMemory($value)
     {
-        for($i = 0; $i < count($values); $i++)
+        for($i = 0; $i < $value; $i++)
         {
-            $this->cells[$i] = new Cell($values[$i]);
+            $this->cells[$i] = new Cell(rand(10, 50));
         }
 
     }
@@ -50,6 +47,7 @@ class Memory
                 $this->currName++;
 
                 $rest = $this->cells[$i]->getSize() - $this->cells[$i]->getOcuped();
+                $this->cells[$i]->setSize($value);
                 break;
             }
         }
@@ -132,11 +130,22 @@ class Memory
 
     public function getCells()
     {
-        $str = "<table>";
-        $str .= "<th>Nome</th><th>Ocupado</th><th>Tamanho</th>";
+        $str = "<table class=\"table\">";
+        $str .= "<thead>
+            <th>Nome</th><th>Ocupado</th><th>Tamanho</th>
+            <thead>";
+            
         foreach ($this->cells as $cell)
         {
-            $str .= "<tr><td>".$cell->getName()."</td>";
+            if($this->currName > 0 && $cell->getName() === $this->alpha[$this->currName - 1])
+            {
+                $str .= "<tr class=\"table-primary\">";
+            } 
+            else 
+            {
+                $str .= "<tr>";
+            }
+            $str .= "<td>".$cell->getName()."</td>";
             $str .= "<td>".$cell->getOcuped()."</td>";
             $str .= "<td>".$cell->getSize()."</td></tr>";
         }
@@ -157,4 +166,15 @@ class Memory
         }
     }
 
+    public function remove($name)
+    {  
+        for($i = 0; $i < count($this->cells); $i++)
+        {
+            if($this->cells[$i]->getName() === strtoupper($name))
+            {
+                $this->cells[$i]->setName("");
+                $this->cells[$i]->setOcuped(0);
+            }
+        }
+    }
 }
